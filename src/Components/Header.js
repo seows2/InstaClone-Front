@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, Switch, withRouter } from "react-router-dom";
+import { gql } from "apollo-boost";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
-import { Compass, HeartEmpty, User, Instagram, Search } from "./Iconst";
+import { Compass, HeartEmpty, User, Instagram } from "./Iconst";
+import { useQuery } from "@apollo/react-hooks";
+import ClipLoader from "react-spinners/SyncLoader";
+import { css } from "@emotion/core";
 
 const Header = styled.header`
   width: 100%;
@@ -61,10 +65,40 @@ const HeaderLink = styled(Link)`
     margin-right: 30px;
   }
 `;
+const override = css`
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+`;
 
-export default () => {
+const GET_MY_PROFILE = gql`
+  {
+    getMyProfile {
+      username
+    }
+  }
+`;
+
+const Router = ({ isLoggedIn }) => (
+  <Switch>{isLoggedIn ? <LogInHeader /> : null}</Switch>
+);
+
+const LogInHeader = withRouter(({ history }) => {
   const search = useInput("");
+  const { data, loading } = useQuery(GET_MY_PROFILE);
+  if (loading) {
+    return <ClipLoader css={override} />;
+  }
+  const {
+    getMyProfile: { username }
+  } = data;
 
+  const onSearchSubmit = e => {
+    e.preventDefault();
+    history.push(`/search?query=${search.value}`);
+  };
   return (
     <Header>
       <HeaderWrapper>
@@ -74,7 +108,7 @@ export default () => {
           </Link>
         </HedaerColumn>
         <HedaerColumn>
-          <form>
+          <form onSubmit={onSearchSubmit}>
             <SearchInput {...search} placeholder={`검색`} />
           </form>
         </HedaerColumn>
@@ -85,11 +119,13 @@ export default () => {
           <HeaderLink to="/notification">
             <HeartEmpty />
           </HeaderLink>
-          <HeaderLink to="/username">
+          <HeaderLink to={username}>
             <User />
           </HeaderLink>
         </HedaerColumn>
       </HeaderWrapper>
     </Header>
   );
-};
+});
+
+export default withRouter(Router);

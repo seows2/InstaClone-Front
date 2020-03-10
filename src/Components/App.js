@@ -1,7 +1,7 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import styled, { ThemeProvider } from "styled-components";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { HashRouter } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -34,7 +34,7 @@ export default () => {
         <GlobalStyles />
         <HashRouter>
           <>
-            <Header />
+            <Header isLoggedIn={isLoggedIn} />
             <Wrapper>
               <Router isLoggedIn={isLoggedIn} />
               <Footer />
