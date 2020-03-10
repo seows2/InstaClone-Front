@@ -17,3 +17,9 @@ export const CONFIRM_SECRET = gql`
     confirmSecret(secret: $secret, email: $email)
   }
 `;
+
+export const LOG_USER_IN = gql`
+  mutation logUserIn($token: String!) {
+    logUserIn(token: $token) @client
+  }
+`;

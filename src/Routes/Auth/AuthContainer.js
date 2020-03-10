@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import AuthPresenter from "./AuthPresenter";
 import useInput from "../../Hooks/useInput";
 import { useMutation } from "react-apollo-hooks";
-import { REQUEST_SECRET, CREATE_ACCOUNT, CONFIRM_SECRET } from "./AuthQueries";
+import {
+  REQUEST_SECRET,
+  CREATE_ACCOUNT,
+  CONFIRM_SECRET,
+  LOG_USER_IN
+} from "./AuthQueries";
 import { toast } from "react-toastify";
 
 export default () => {
@@ -31,6 +36,8 @@ export default () => {
       email: login_email.value
     }
   });
+
+  const [logUserInMutation] = useMutation(LOG_USER_IN, {});
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -94,8 +101,12 @@ export default () => {
           const {
             data: { confirmSecret }
           } = await confirmSecretMutation();
-          console.log(confirmSecret);
-          //해야할것 유저 로그인시키기
+          const token = confirmSecret;
+          if (token !== "" && token !== undefined) {
+            logUserInMutation({ variables: { token } });
+          } else {
+            throw Error();
+          }
         } catch (error) {
           toast.error("비밀코드를 확인 할 수 없습니다");
         }
