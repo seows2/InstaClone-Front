@@ -7,6 +7,7 @@ const Footer = styled.footer`
   align-items: center;
   font-weight: 600;
   font-size: 14px;
+  margin: 50px 0px;
 `;
 
 const List = styled.ul`

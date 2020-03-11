@@ -6,8 +6,6 @@ import Input from "./Input";
 import useInput from "../Hooks/useInput";
 import { Compass, HeartEmpty, User, Instagram } from "./Iconst";
 import { useQuery } from "@apollo/react-hooks";
-import ClipLoader from "react-spinners/SyncLoader";
-import { css } from "@emotion/core";
 
 const Header = styled.header`
   width: 100%;
@@ -16,10 +14,12 @@ const Header = styled.header`
   border-bottom: ${props => props.theme.boxBorder};
   border-radius: 0px;
   margin-bottom: 60px;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-content: center;
   padding: 25px 0px;
+  z-index: 2;
 `;
 
 const HeaderWrapper = styled.div`
@@ -65,13 +65,6 @@ const HeaderLink = styled(Link)`
     margin-right: 30px;
   }
 `;
-const override = css`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
-`;
 
 const GET_MY_PROFILE = gql`
   {
@@ -88,12 +81,6 @@ const Router = ({ isLoggedIn }) => (
 const LogInHeader = withRouter(({ history }) => {
   const search = useInput("");
   const { data, loading } = useQuery(GET_MY_PROFILE);
-  if (loading) {
-    return <ClipLoader css={override} />;
-  }
-  const {
-    getMyProfile: { username }
-  } = data;
 
   const onSearchSubmit = e => {
     e.preventDefault();
@@ -119,7 +106,13 @@ const LogInHeader = withRouter(({ history }) => {
           <HeaderLink to="/notification">
             <HeartEmpty />
           </HeaderLink>
-          <HeaderLink to={username}>
+          <HeaderLink
+            to={
+              data && data.getMyProfile
+                ? `/${data.getMyProfile.username}`
+                : "/#"
+            }
+          >
             <User />
           </HeaderLink>
         </HedaerColumn>
