@@ -27,6 +27,7 @@ const Link = styled.a`
 const Copyright = styled.span`
   color: ${props => props.theme.darkGreyColor};
 `;
+
 export default () => (
   <Footer>
     <List>

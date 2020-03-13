@@ -1,23 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import { Link, Switch, withRouter } from "react-router-dom";
-import { gql } from "apollo-boost";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
 import { Compass, HeartEmpty, User, Instagram } from "./Iconst";
 import { useQuery } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
 
 const Header = styled.header`
   width: 100%;
   border: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: white;
   border-bottom: ${props => props.theme.boxBorder};
   border-radius: 0px;
-  margin-bottom: 60px;
-  position: fixed;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   padding: 25px 0px;
   z-index: 2;
 `;
@@ -66,6 +67,10 @@ const HeaderLink = styled(Link)`
   }
 `;
 
+const Router = ({ isLoggedIn }) => (
+  <Switch>{isLoggedIn ? <LogInHeader /> : null}</Switch>
+);
+
 const GET_MY_PROFILE = gql`
   {
     getMyProfile {
@@ -73,14 +78,9 @@ const GET_MY_PROFILE = gql`
     }
   }
 `;
-
-const Router = ({ isLoggedIn }) => (
-  <Switch>{isLoggedIn ? <LogInHeader /> : null}</Switch>
-);
-
 const LogInHeader = withRouter(({ history }) => {
   const search = useInput("");
-  const { data, loading } = useQuery(GET_MY_PROFILE);
+  const { data } = useQuery(GET_MY_PROFILE);
 
   const onSearchSubmit = e => {
     e.preventDefault();
@@ -96,7 +96,11 @@ const LogInHeader = withRouter(({ history }) => {
         </HedaerColumn>
         <HedaerColumn>
           <form onSubmit={onSearchSubmit}>
-            <SearchInput {...search} placeholder={`검색`} />
+            <SearchInput
+              value={search.value}
+              onChange={search.onChange}
+              placeholder={`검색`}
+            />
           </form>
         </HedaerColumn>
         <HedaerColumn>

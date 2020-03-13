@@ -1,4 +1,5 @@
 import React from "react";
+import Helmet from "react-helmet";
 import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
@@ -57,27 +58,53 @@ export default ({
   secret,
   onSubmit
 }) => (
-  <Wrapper className={"Container"}>
+  <Wrapper>
+    <Helmet>
+      <title>InstaClone</title>
+    </Helmet>
     <Form>
       {state === "logIn" && (
         <form onSubmit={onSubmit}>
-          <Input placeholder={"이메일 주소"} {...login_email} type="email" />
+          <Input
+            placeholder={"이메일 주소"}
+            value={login_email.value}
+            onChange={login_email.onChange}
+            type="email"
+          />
 
           <Button text={"로그인"} />
         </form>
       )}
       {state === "signUp" && (
         <form onSubmit={onSubmit}>
-          <Input placeholder={"이메일 주소"} {...sign_email} type="email" />
-          <Input placeholder={"성명"} {...name} />
-          <Input placeholder={"사용자 이름"} {...username} />
+          <Input
+            placeholder={"이메일 주소"}
+            value={sign_email.value}
+            onChange={sign_email.onChange}
+            type="email"
+          />
+          <Input
+            placeholder={"성명"}
+            value={name.value}
+            onChange={name.onChange}
+          />
+          <Input
+            placeholder={"사용자 이름"}
+            value={username.value}
+            onChange={username.onChange}
+          />
 
           <Button text={"가입하기"} />
         </form>
       )}
       {state === "confirm" && (
         <form onSubmit={onSubmit}>
-          <Input placeholder={"암호 붙여넣기"} required {...secret} />
+          <Input
+            placeholder={"암호 붙여넣기"}
+            required
+            value={secret.value}
+            onChange={secret.onChange}
+          />
           <Button text={"확인"} />
         </form>
       )}
