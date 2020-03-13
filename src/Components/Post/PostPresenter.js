@@ -7,6 +7,7 @@ import { HeartFull, HeartEmpty, CommentIcon, Prev, Next } from "../Iconst";
 import DotCarousel from "../DotCarousel";
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/core";
+import { Link } from "react-router-dom";
 
 const Post = styled.div`
   ${props => props.theme.whiteBox}
@@ -117,6 +118,18 @@ const Comment = styled.li`
     margin-right: 5px;
   }
 `;
+
+const CommentLink = styled(Link)`
+  color: inherit;
+`;
+
+const Caption = styled.div`
+  margin-top: 10px;
+  margin-bottom: 15px;
+  padding-bottom: 20px;
+  border-bottom: #c7c7c7 1px solid;
+`;
+
 const override = css`
   display: block;
   margin: 0 auto;
@@ -139,14 +152,17 @@ export default ({
   onKeyPress,
   comments,
   selfComments,
-  loading
+  loading,
+  caption
 }) => {
   return (
     <Post>
       <Header>
         <Avatar size={"sm"} url={avatar} />
         <UserColumn>
-          <BoldText text={username} />
+          <CommentLink to={`/${username}`}>
+            <BoldText text={username} />
+          </CommentLink>
           <Location>{location}</Location>
         </UserColumn>
       </Header>
@@ -186,17 +202,24 @@ export default ({
           </Button>
         </Buttons>
         <BoldText text={`좋아요 ${likeCount}개`} />
+        <Caption>
+          <BoldText text={username} /> {caption}
+        </Caption>
         {comments && (
           <Comments>
             {comments.map(comment => (
               <Comment key={comment.id}>
-                <BoldText text={comment.user.username} />
+                <CommentLink to={`/${comment.user.username}`}>
+                  <BoldText text={comment.user.username} />
+                </CommentLink>
                 {comment.text}
               </Comment>
             ))}
             {selfComments.map(comment => (
               <Comment key={comment.id}>
-                <BoldText text={comment.user.username} />
+                <CommentLink to={`/${comment.user.username}`}>
+                  <BoldText text={comment.user.username} />
+                </CommentLink>
                 {comment.text}
               </Comment>
             ))}

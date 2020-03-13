@@ -11,15 +11,11 @@ export const resolvers = {
           isLoggedIn: true
         }
       });
+      window.location.reload();
       return null;
     },
     logUserOut: (_, __, { cache }) => {
       localStorage.removeItem("token");
-      cache.writeData({
-        data: {
-          isLoggedIn: false
-        }
-      });
       window.location.reload();
       return null;
     }

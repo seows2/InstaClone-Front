@@ -3,7 +3,7 @@ import PropType from "prop-types";
 import useInput from "../../Hooks/useInput";
 import PostPresenter from "./PostPresenter";
 import { useMutation } from "@apollo/react-hooks";
-import { TOGGLE_LIKE, ADD_COMMENT } from "./PostQuerys";
+import { TOGGLE_LIKE, ADD_COMMENT } from "./PostQueries";
 import { toast } from "react-toastify";
 
 const PostContainer = ({
@@ -34,6 +34,13 @@ const PostContainer = ({
 
   const showNext = () => !isRightEnd && setTargetIndex(targetIndex + 1);
   const showPrev = () => !isLeftEnd && setTargetIndex(targetIndex - 1);
+
+  const getFormatData = date => {
+    const month = date.substr(5, 2);
+    const day = date.substr(8, 2);
+    return month + "월 " + day + "일";
+  };
+  createdAt = getFormatData(createdAt);
 
   const toggleLike = async () => {
     if (likeState === true) {
